@@ -2,10 +2,13 @@ package com.myapp.travelmantics;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -86,13 +89,22 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
 
     public class DealViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
+        TextView tvDescription;
+        TextView tvPrice;
+        ImageView tvDeal;
         public DealViewHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
+            tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
+            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            tvDeal = (ImageView) itemView.findViewById(R.id.imageDeal);
         }
 
         public void bind(TravelDeal deal) {
             tvTitle.setText(deal.getTitle());
+            tvDescription.setText(deal.getDescription());
+            tvPrice.setText(deal.getPrice());
+
         }
     }
 }
