@@ -6,4 +6,8 @@
         android:id="@+id/insert_menu"
         android:title="@string/list_activity_item_title"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/logout_menu"
+        android:title="@string/Logout"
+        app:showAsAction="never"/>
 </menu>
