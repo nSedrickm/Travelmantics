@@ -3,16 +3,24 @@ package com.myapp.travelmantics;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.PixelCopy;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     EditText txtDescription;
     EditText txtPrice;
     TravelDeal deal;
+    private static final int PICTURE_RESULT = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +42,11 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
 
+
         txtTitle = (EditText) findViewById(R.id.txtTitle);
         txtDescription = (EditText) findViewById(R.id.txtDescription);
         txtPrice = (EditText) findViewById(R.id.txtPrice);
+
         Intent intent = getIntent();
         TravelDeal deal = (TravelDeal) intent.getSerializableExtra("Deal");
         if (deal==null) {
@@ -45,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
         txtTitle.setText(deal.getTitle());
         txtDescription.setText(deal.getDescription());
         txtPrice.setText(deal.getPrice());
+        Button btnImage = findViewById(R.id.btnImage);
+        btnImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(intent.createChooser(intent,
+                        "Insert Picture"), PICTURE_RESULT);
+            }
+        });
     }
         @Override
         public boolean onOptionsItemSelected(MenuItem item){
@@ -65,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+
         @Override
         public boolean onCreateOptionsMenu (Menu menu) {
             MenuInflater inflater = getMenuInflater();
@@ -82,6 +105,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
 
         }
+
+        @Override
+        protected void onActivityResult(int requestCode,int resultCode,Intent data)  {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == PICTURE_RESULT && resultCode == RESULT_OK) {
+                Uri imageUri = data.getData();
+                StorageReference ref = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
+                ref.putFile(imageUri);
+
+            }
+        }
+
         private void saveDeal() {
            deal.setTitle(txtTitle.getText().toString());
            deal.setDescription(txtDescription.getText().toString());

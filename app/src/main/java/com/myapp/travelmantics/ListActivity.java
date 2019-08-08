@@ -54,7 +54,7 @@ public class ListActivity extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
              switch (item.getItemId()){
                  case R.id.insert_menu:
-                     Intent intent  = new Intent (this,MainActivity.class);
+                     Intent intent  = new Intent (this, MainActivity.class);
                      startActivity(intent);
                      return true;
                  case R.id.logout_menu:

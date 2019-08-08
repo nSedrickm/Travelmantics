@@ -9,4 +9,5 @@
     <string name="list_activity_item_title">New Travel Deal</string>
     <string name="delete_deal_title">Delete Deal</string>
     <string name="Logout">Logout</string>
+    <string name="upload_image">Upload Image</string>
 </resources>
